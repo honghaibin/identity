@@ -1,0 +1,36 @@
+name: identity-learning
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: identity
+      POSTGRES_USER: identity_migrator
+      POSTGRES_PASSWORD: ${IDENTITY_DB_ADMIN_PASSWORD:?set database admin password}
+      IDENTITY_DB_APP_PASSWORD: ${IDENTITY_DB_APP_PASSWORD:?set database app password}
+    ports:
+      - "127.0.0.1:15432:5432"
+    volumes:
+      - identity_pg:/var/lib/postgresql
+      - ./init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U identity_migrator -d identity"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  redis:
+    image: redis:8
+    environment:
+      REDIS_PASSWORD: ${IDENTITY_REDIS_PASSWORD:?set redis password}
+    command: ["sh", "-c", "exec redis-server --appendonly yes --requirepass \"$$REDIS_PASSWORD\""]
+    ports:
+      - "127.0.0.1:16379:6379"
+    volumes:
+      - identity_redis:/data
+    healthcheck:
+      test: ["CMD-SHELL", "REDISCLI_AUTH=\"$$REDIS_PASSWORD\" redis-cli ping | grep -q PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+volumes:
+  identity_pg:
+  identity_redis:

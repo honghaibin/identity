@@ -1,0 +1,9 @@
+### 1. 健康检查：预期 HTTP 200，响应中 status 为 UP
+GET http://localhost:18080/actuator/health
+
+### 2. 开发接口：启用 local 时预期 HTTP 200
+### 响应：{"message":"identity is running"}
+GET http://localhost:18080/api/dev/ping
+
+### 3. 不存在的接口：预期 HTTP 404
+GET http://localhost:18080/api/dev/missing

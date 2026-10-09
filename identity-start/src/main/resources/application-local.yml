@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:15432/identity
+    username: identity_app
+    password: ${IDENTITY_DB_APP_PASSWORD}
+  flyway:
+    url: jdbc:postgresql://127.0.0.1:15432/identity
+    user: identity_migrator
+    password: ${IDENTITY_DB_ADMIN_PASSWORD}
+    locations: classpath:db/migration
+mybatis:
+  mapper-locations: classpath*:mybatis/**/*.xml

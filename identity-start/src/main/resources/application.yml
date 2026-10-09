@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: identity
+server:
+  address: 127.0.0.1
+  port: 18080
+management:             # Actuator 管理与监控相关配置
+  endpoints:            # 管理端点
+    web:                # 通过 HTTP 访问的端点
+      exposure:         # 控制对外暴露哪些端点
+        include: health # 只暴露 health  GET http://localhost:8080/actuator/health
